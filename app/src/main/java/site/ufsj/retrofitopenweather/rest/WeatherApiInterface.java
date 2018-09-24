@@ -14,7 +14,7 @@ import site.ufsj.retrofitopenweather.models.WeatherAPIResult;
 
 public interface WeatherApiInterface {
     @GET("/data/2.5/forecast/daily")
-    Call<WeatherAPIResult> getWeather(@Query("id") int cityID, @Query("APPID") String appID);
+    Call<WeatherAPIResult> getWeather(@Query("id") int cityID, @Query("APPID") String appID, @Query("units") String units);
 
     public static final Retrofit retrofit = new Retrofit.Builder()
             .baseUrl("http://api.openweathermap.org")

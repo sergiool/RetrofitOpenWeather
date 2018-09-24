@@ -9,7 +9,13 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -35,7 +41,8 @@ public class MainActivity extends AppCompatActivity {
                 //Send get weather request
                 WeatherApiInterface weatherApiInterface = WeatherApiInterface.retrofit.create(WeatherApiInterface.class);
                 //We need to pass our city ID and our openweathermap APPID
-                Call<WeatherAPIResult> call = weatherApiInterface.getWeather(3465644, "476f28ed531b9477e89ddb6ab463dbd5");
+
+                Call<WeatherAPIResult> call = weatherApiInterface.getWeather(3465644, "476f28ed531b9477e89ddb6ab463dbd5", "metric");
                 call.enqueue(new Callback<WeatherAPIResult>() {
                     @Override
                     public void onResponse(Call<WeatherAPIResult> call, Response<WeatherAPIResult> response) {
@@ -44,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
                             WeatherAPIResult result = response.body();
                             textView.setText(result.getCity().getName() + " :"
                             + result.getList().get(0).getWeather().get(0).getDescription());
+
+                            ListView lv = findViewById(R.id.lv);
+                            lv.setAdapter(new DayAdapter(MainActivity.this, result.getList()));
                         } else {
                             Log.e("MainActivity", "Response received but request not successful. Response: " + response.raw());
                             textView.setText("Response received but request not successful. Response: " + response.raw());
